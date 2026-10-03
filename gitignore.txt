@@ -1,0 +1,11 @@
+# Dati e file che non devono mai entrare nel repository
+PACCHETTO_SITO_GITHUB/
+dati_privati/
+**/2_SOLO_DIETRO_LOGIN/
+**/3_PRIVATO_mai_online/
+**/PRIVATO_*
+.env
+.env.*
+*.xlsx
+*.pdf
+node_modules/

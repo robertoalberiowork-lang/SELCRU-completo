@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Wine Catalogue | SELCRU</title>
+<!-- Replica della grafica di selcru.com (Tailwind, Lexend + Jost, indaco #4338CA, crema #FAF6F0),
+     con il catalogo pubblico di Selcru (vini e produttori in codice).
+     Logo e foto d'apertura sono caricati da selcru.com; le bottiglie sono illustrazioni. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{jost:['Jost','ui-sans-serif','system-ui','sans-serif'],lexend:['Lexend','ui-sans-serif','system-ui','sans-serif']},colors:{cream:'#faf6f0',taupe:'#6b6560'}}}}</script>
+<style>
+  html{scroll-behavior:smooth}
+  .marquee{display:inline-flex;animation:scorri 40s linear infinite}
+  @keyframes scorri{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion: reduce){.marquee{animation:none}html{scroll-behavior:auto}}
+  .clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+</style>
+</head>
+<body class="m-0 overflow-x-hidden bg-[#faf6f0] p-0 font-jost text-[#1a1a1a] antialiased">
+
+<header><nav class="fixed left-0 right-0 top-0 z-[100] flex items-center justify-between gap-3 border-b border-[#b8935a33] bg-[#faf6f0eb] px-4 py-3 backdrop-blur sm:px-6 md:px-16 md:py-4">
+  <a class="inline-flex min-w-0 items-center" aria-label="Selcru Home" href="#/"><img src="https://selcru.com/brand/selcru-logo.svg" alt="SELCRU" class="block h-9 w-auto sm:h-11"></a>
+  <ul class="m-0 hidden list-none items-center gap-12 p-0 md:flex">
+    <li><a href="#/collection" class="text-[13px] font-bold uppercase tracking-[0.18em] text-[#000000] transition-colors hover:text-[#2a269e]">Collection</a></li>
+    <li><a href="#/regions" class="text-[13px] font-bold uppercase tracking-[0.18em] text-[#000000] transition-colors hover:text-[#2a269e]">Regions</a></li>
+    <li><a href="#/plan" class="text-[13px] font-bold uppercase tracking-[0.18em] text-[#000000] transition-colors hover:text-[#2a269e]">Plan</a></li></ul>
+  <a class="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#4338ca] bg-[#4338ca] px-3 text-sm font-bold text-white shadow-sm transition-colors hover:border-[#312e81] hover:bg-[#312e81] sm:h-10 sm:px-4" href="#/login">Login</a>
+</nav></header>
+
+<main id="app"></main>
+
+<footer class="border-t border-slate-800 bg-[#0f172a] px-4 py-10 sm:px-6 md:px-16 md:py-12"><div class="mx-auto flex max-w-7xl flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+  <a class="inline-flex shrink-0 items-center rounded-2xl border border-white/10 bg-white/95 px-4 py-2 shadow-sm backdrop-blur-sm" aria-label="Selcru Home" href="#/"><img src="https://selcru.com/brand/selcru-logo.svg" alt="SELCRU" class="h-9 w-auto md:h-10"></a>
+  <nav aria-label="Footer"><ul class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 sm:gap-x-8 md:justify-end">
+    <li><a href="#/collection" class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:text-[#93c5fd] sm:text-xs">Collection</a></li><li><a href="#/regions" class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:text-[#93c5fd] sm:text-xs">Regions</a></li><li><a href="#/plan" class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:text-[#93c5fd] sm:text-xs">Plan</a></li><li><a href="#/plan" class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:text-[#93c5fd] sm:text-xs">Privacy</a></li><li><a href="#/plan" class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400 transition-colors hover:text-[#93c5fd] sm:text-xs">Terms</a></li></ul></nav></div>
+  <p class="mx-auto mt-10 max-w-7xl text-center text-xs text-slate-500 md:text-left">© 2026 Selcru. All rights reserved.</p></footer>
+
+<script>
+"use strict";
+/* Catalogo pubblico, dalla piattaforma (vini degli ordini 2025–2026). Niente nomi di cantina:
+   i produttori sono in codice (P01…); nomi, storie e prezzi si vedono dopo il login, nel portale.
+   [id, denominazione, colore, regione, annata, alcol, fascia EXW, uve, degustazione, abbinamenti, vigneto, affinamento, produttore] */
+const D = [
+["W001", "Etna Bianco DOC", "bianco", "Sicilia", "2024", 14, "€7.50–10", "Carricante, Catarratto", "An elegant bouquet; fresh, intense and harmonious on the palate, with pleasant mineral notes", "Regional cured meats, cheeses and pickled vegetables", "Contrada Arrigo, ~600 m, volcanic soils", "In barriques", "P01"],
+["W002", "Etna Rosso DOC", "rosso", "Sicilia", "2023", 14, "€7.50–10", "Nerello Mascalese", "The Etna terroir in a mineral key", "", "~600 m on the northern slope", "In barriques", "P01"],
+["W003", "Etna Rosso DOC", "rosso", "Sicilia", "2022", 14.5, "€15–25", "", "", "", "", "", "P01"],
+["W004", "White wine from Sicily", "bianco", "Sicilia", "NV", 12.5, "€7.50–10", "Catarratto 100%", "Anise, almond, Mediterranean herbs, a dusting of gypsum, ripe apricot; a sharp entry, depth, a long and persistent finish", "", "Calcareous, gypsum-rich inland soils", "", "P02"],
+["W005", "Red wine from Sicily", "rosso", "Sicilia", "2021", 13, "€7.50–10", "Nerello Mascalese 100%", "Ultra-fresh, precise, spicy, unmistakably volcanic", "", "Terraced lava soils at ~450 m", "Maceration in amphora", "P02"],
+["W006", "Etna Rosso DOC", "rosso", "Sicilia", "2023", 14, "€10–15", "", "", "", "", "", "P03"],
+["W007", "Etna Bianco DOC", "bianco", "Sicilia", "2023", 13, "€10–15", "", "", "", "", "", "P03"],
+["W008", "Etna Rosso DOC", "rosso", "Sicilia", "2023", 14, "€15–25", "", "", "", "", "", "P03"],
+["W009", "Etna Bianco DOC", "bianco", "Sicilia", "2023", 13.5, "€15–25", "", "", "", "", "", "P03"],
+["W010", "Sicilia DOC", "rosso", "Sicilia", "2023", 14.5, "€7.50–10", "Nerello Mascalese", "", "", "", "", "P03"],
+["W011", "Cannonau di Sardegna DOC", "rosso", "Sardegna", "2023", 13.5, "€5–7.50", "Cannonau", "Intense red fruit: strawberry, raspberry, currant; power and elegance in the Gallura manner", "Spaghetti with tomato and basil, tuna roe", "Clay with sand and granite", "6 months in steel", "P04"],
+["W012", "Vermentino di Gallura DOCG", "bianco", "Sardegna", "2025", 13, "€5–7.50", "Vermentino di Gallura 100%", "Straw yellow with green glints; pear and citrus giving way to Mediterranean scrub; fresh, savoury and balanced", "Crudités, salt-baked fish, scampi risotto", "Clay with abundant weathered granite", "5 months in steel", "P04"],
+["W013", "Langhe Nebbiolo DOC", "rosso", "Piemonte", "2025", 13.5, "€5–7.50", "Nebbiolo 100%", "Ruby with garnet glints; intense, fruity nose", "Red meats, stews and braises", "South-facing clay-limestone, high magnesium; planted 2019", "4 months in French barriques", "P05"],
+["W014", "Dolcetto del Monferrato DOC", "rosso", "Piemonte", "2025", 13, "under €5", "Dolcetto", "", "", "", "", "P05"],
+["W015", "Barbera d'Asti DOCG", "rosso", "Piemonte", "2025", 13.5, "under €5", "Barbera", "", "", "", "", "P05"],
+["W016", "Barbera d'Asti DOCG Superiore", "rosso", "Piemonte", "2023", 14.5, "€7.50–10", "Barbera 100%, vines planted in 1980", "Very intense garnet with ruby glints; liquorice and jam; great structure with a smooth, delicate texture", "All meat dishes; first courses and risotti", "Mid-slope, south-east; clay-limestone with spontaneous cover crop", "24 months: 12 in barriques, 12 in 700 L tonneaux", "P05"],
+["W017", "Primitivo Puglia IGP", "rosso", "Puglia", "", 13.5, "under €5", "Primitivo", "", "", "", "", "P06"],
+["W018", "Puglia IGP", "rosso", "Puglia", "2022", 13, "under €5", "Nero di Troia", "", "", "", "", "P07"],
+["W019", "Castel del Monte DOC", "rosso", "Puglia", "2022", 13, "under €5", "Nero di Troia", "", "", "", "", "P07"],
+["W020", "Nero di Troia Castel del Monte DOC", "rosso", "Puglia", "2020", 14, "€5–7.50", "Nero di Troia", "", "", "", "", "P07"],
+["W021", "Castel del Monte DOC", "rosso", "Puglia", "2022", 13, "under €5", "", "", "", "", "", "P07"],
+["W022", "Isola dei Nuraghi IGT", "rosso", "Sardegna", "2021", 13.5, "€10–15", "", "", "", "", "", "P08"],
+["W023", "Red wine from Sardinia", "rosso", "Sardegna", "2022", 13, "€5–7.50", "", "", "", "", "", "P08"],
+["W024", "Vermentino di Sardegna DOC", "bianco", "Sardegna", "2023", 13, "€7.50–10", "Vermentino", "", "", "", "", "P08"],
+["W025", "Langhe Nebbiolo DOC", "rosso", "Piemonte", "2021", 14, "€7.50–10", "Nebbiolo", "", "", "", "", "P09"],
+["W026", "Rubicone IGT", "bianco", "Emilia-Romagna", "", 12, "under €5", "Trebbiano, Chardonnay", "", "", "", "", "P10"],
+["W027", "Romagna Albana DOCG", "bianco", "Emilia-Romagna", "2025", 14, "€5–7.50", "Albana", "", "", "", "", "P10"],
+["W028", "Romagna DOC Sangiovese Superiore", "rosso", "Emilia-Romagna", "2025", 14, "€5–7.50", "Sangiovese", "", "", "", "", "P10"],
+["W029", "Romagna DOC Riserva", "rosso", "Emilia-Romagna", "2023", 14.5, "€7.50–10", "Sangiovese", "", "", "", "", "P10"],
+["W030", "Emilia IGT Lambrusco", "spumante", "Emilia-Romagna", "", 11, "€5–7.50", "Lambrusco", "", "", "", "", "P10"],
+["W031", "Romagna DOC Sangiovese Superiore", "rosso", "Emilia-Romagna", "2022", 14.5, "€7.50–10", "Sangiovese", "", "", "", "", "P11"],
+["W032", "White wine from Friuli", "bianco", "Friuli", "", null, "", "Ribolla Gialla", "", "", "", "", "P12"],
+["W033", "White wine from Friuli", "bianco", "Friuli", "", null, "", "Friulano", "", "", "", "", "P12"],
+["W034", "Tuscia DOC", "rosso", "Lazio", "2022", 13.5, "", "", "", "", "", "", "P13"],
+["W035", "Oltrepò Pavese DOC", "spumante", "Lombardia", "2023", 13.5, "", "Bonarda", "", "", "", "", "P14"],
+["W036", "Oltrepò Pavese DOC", "rosso", "Lombardia", "2025", 13, "under €5", "Barbera", "", "", "", "", "P14"],
+["W037", "Bonarda dell'Oltrepò Pavese DOC", "rosso", "Lombardia", "2021", 13.5, "€5–7.50", "Bonarda", "", "", "", "", "P14"],
+["W038", "Puglia IGP", "rosato", "Puglia", "2025", 12.5, "€5–7.50", "Susumaniello", "", "", "", "", "P15"],
+["W039", "Puglia IGP", "rosso", "Puglia", "2023", 13, "€5–7.50", "Primitivo", "", "", "", "", "P15"],
+["W040", "Puglia IGP", "bianco", "Puglia", "2025", 12.5, "€5–7.50", "Fiano", "", "", "", "", "P15"],
+["W041", "Conegliano Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "", 11.5, "€5–7.50", "Glera", "", "", "", "", "P16"],
+["W042", "Conegliano Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "NV", 11.5, "€5–7.50", "Glera", "", "", "", "", "P16"],
+["W043", "Conegliano Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "NV", 11.5, "€5–7.50", "Glera", "", "", "", "", "P16"],
+["W044", "Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "NV", 11.5, "€5–7.50", "Glera", "", "", "", "", "P17"],
+["W045", "Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "NV", 11.5, "€5–7.50", "Glera", "", "", "", "", "P17"],
+["W046", "Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "2025", 11.5, "€5–7.50", "Glera", "", "", "", "", "P18"],
+["W047", "Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "2025", 11.5, "€5–7.50", "Glera", "", "", "", "", "P18"],
+["W048", "Valdobbiadene Prosecco Superiore DOCG", "spumante", "Veneto", "", 11.5, "€5–7.50", "Glera", "", "", "", "", "P18"],
+["W049", "Prosecco DOC Treviso", "spumante", "Veneto", "2025", 11.5, "under €5", "Glera", "", "", "", "", "P19"],
+["W050", "Amarone della Valpolicella DOCG", "rosso", "Veneto", "2019", 15.5, "€15–25", "Corvina, Rondinella", "", "", "", "", "P20"],
+["W051", "Delle Venezie DOC Pinot Grigio", "bianco", "Veneto", "2025", 12.5, "under €5", "Pinot Grigio", "", "", "", "", "P20"],
+["W052", "Montepulciano d'Abruzzo DOC", "rosso", "Abruzzo", "2024", 14, "under €5", "Montepulciano", "", "", "", "", "P21"],
+["W053", "Montepulciano d'Abruzzo DOC Riserva", "rosso", "Abruzzo", "", null, "€5–7.50", "Montepulciano", "", "", "", "", "P21"],
+["W054", "Toscana IGT", "rosso", "Toscana", "2024", 13, "€7.50–10", "", "", "", "", "", "P22"],
+["W055", "Toscana IGT Sangiovese", "rosso", "Toscana", "2024", 13, "€7.50–10", "Sangiovese", "", "", "", "", "P22"],
+["W056", "Toscana IGT Ciliegiolo", "rosso", "Toscana", "2024", 14, "€7.50–10", "Ciliegiolo", "", "", "", "", "P22"],
+["W057", "Toscana IGT Viognier", "bianco", "Toscana", "2024", 13.5, "€7.50–10", "Viognier", "", "", "", "", "P22"],
+["W058", "Chianti Classico DOCG", "rosso", "Toscana", "2023", 13.5, "under €5", "Sangiovese", "", "", "", "", "P23"],
+["W059", "Chianti Classico DOCG Riserva", "rosso", "Toscana", "2020", 14, "€5–7.50", "Sangiovese", "", "", "", "", "P23"],
+["W060", "Maremma Toscana DOC", "rosso", "Toscana", "2022", 13.5, "under €5", "", "", "", "", "", "P24"],
+["W061", "Maremma Toscana DOC Vermentino", "bianco", "Toscana", "2025", 13.5, "€5–7.50", "Vermentino", "", "", "", "", "P24"],
+["W062", "Barolo DOCG", "rosso", "Piemonte", "2021", 14, "€10–15", "Nebbiolo", "", "", "", "", "P25"],
+["W063", "Barbaresco DOCG", "rosso", "Piemonte", "2022", 14.5, "€10–15", "Nebbiolo", "", "", "", "", "P25"],
+["W064", "Barbera d'Alba DOC", "rosso", "Piemonte", "2023", 14.5, "under €5", "Barbera", "", "", "", "", "P25"],
+["W065", "Barbera d'Asti DOCG", "rosso", "Piemonte", "2022", 15, "under €5", "Barbera", "", "", "", "", "P25"],
+["W066", "Piemonte DOC Moscato", "dolce", "Piemonte", "2024", 5.5, "under €5", "Moscato", "", "", "", "", "P26"],
+["W067", "Falerio DOC Pecorino", "bianco", "Marche", "", 12.5, "under €5", "Pecorino", "", "", "", "", "P27"],
+["W068", "Marche IGT Passerina", "bianco", "Marche", "", 12.5, "under €5", "Passerina", "", "", "", "", "P27"],
+["W069", "Verdicchio dei Castelli di Jesi DOC", "bianco", "Marche", "", 12.5, "under €5", "Verdicchio", "", "", "", "", "P27"],
+["W070", "Etna DOC Bianco", "bianco", "Sicilia", "2025", 12.5, "€7.50–10", "Carricante, Catarratto", "", "", "", "", "P28"],
+["W071", "Etna DOC Rosato", "rosato", "Sicilia", "2025", 12.5, "€7.50–10", "Nerello Mascalese", "", "", "", "", "P28"],
+["W072", "Etna DOC Rosso", "rosso", "Sicilia", "2024", 13, "€7.50–10", "Nerello Mascalese", "", "", "", "", "P28"],
+["W073", "Terre Siciliane IGT", "bianco", "Sicilia", "2025", 12.5, "€5–7.50", "", "", "", "", "", "P28"],
+["W074", "Terre Siciliane IGT", "rosso", "Sicilia", "2024", 13, "€5–7.50", "", "", "", "", "", "P28"],
+["W075", "Metodo Classico Brut", "spumante", "Sicilia", "2023", 12.5, "€7.50–10", "Nerello Mascalese", "", "", "", "", "P28"],
+["W076", "Terre Siciliane IGT", "rosso", "Sicilia", "2021", null, "€5–7.50", "", "", "", "", "", "P29"],
+["W077", "Faro DOC", "rosso", "Sicilia", "2015", 13.5, "€7.50–10", "", "", "", "", "", "P29"],
+["W078", "Greco di Tufo DOCG", "bianco", "Campania", "2025", 13, "€5–7.50", "Greco", "", "", "", "", "P30"],
+["W079", "Fiano di Avellino DOCG", "bianco", "Campania", "2025", 13, "€5–7.50", "Fiano", "", "", "", "", "P30"],
+["W080", "Irpinia DOC Falanghina", "bianco", "Campania", "2025", 13, "under €5", "Falanghina", "", "", "", "", "P30"],
+["W081", "Aglianico Campania IGT", "rosso", "Campania", "", 13, "under €5", "Aglianico", "", "", "", "", "P30"],
+["W082", "Taurasi DOCG", "rosso", "Campania", "", 13.5, "€7.50–10", "Aglianico", "", "", "", "", "P30"]
+].map(([id,t,c,r,a,g,b,gr,ts,pa,vy,ag,p]) => ({id,t,c,r,a,g,b,gr,ts,pa,vy,ag,p}));
+
+const REG_EN = { Sicilia:"Sicily", Toscana:"Tuscany", Piemonte:"Piedmont", Puglia:"Apulia", Sardegna:"Sardinia", Veneto:"Veneto", Campania:"Campania",
+  "Emilia-Romagna":"Emilia-Romagna", Abruzzo:"Abruzzo", Marche:"Marche", Lombardia:"Lombardy", Friuli:"Friuli", Lazio:"Lazio" };
+const TIPO = { rosso:"Red", bianco:"White", spumante:"Sparkling", rosato:"Rose", dolce:"Sweet" };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const regEn = r => REG_EN[r] || r || "Italy";
+
+/* Bottiglia illustrata: forma e vetro secondo il tipo, etichetta con denominazione e annata. */
+function bottiglia(v, big){
+  const k = v.c, H = 300;
+  const vetro = { rosso:"#22392b", bianco:"#5e7a3a", spumante:"#1f3326", rosato:"#e8b4bc", dolce:"#a0662a" }[k];
+  const spalla = k === "bianco" || k === "rosato" || k === "dolce";               // borgognona / renana
+  const corpo = k === "spumante" ? "M38,300 L38,150 C38,118 50,104 54,86 L54,30 L66,30 L66,86 C70,104 82,118 82,150 L82,300 Z"
+              : spalla ? "M40,300 L40,150 C40,122 52,110 55,92 L55,26 L65,26 L65,92 C68,110 80,122 80,150 L80,300 Z"
+              : "M38,300 L38,128 C38,112 52,108 55,98 L55,26 L65,26 L65,98 C68,108 82,112 82,128 L82,300 Z";
+  const cap = k === "spumante" ? '<path d="M52,22 L68,22 L69,64 L51,64 Z" fill="#c9a227"/>' : '<rect x="53.5" y="22" width="13" height="26" rx="2" fill="#7a1730"/>';
+  const words = v.t.replace(/ (DOCG|DOC|IGT|IGP)/, "\n$1").split("\n");
+  const righe = words[0].length > 18 ? [words[0].split(" ").slice(0, Math.ceil(words[0].split(" ").length/2)).join(" "), words[0].split(" ").slice(Math.ceil(words[0].split(" ").length/2)).join(" ")] : [words[0]];
+  const etichetta = `<rect x="42" y="184" width="36" height="74" rx="2" fill="#f7f1e3"/><rect x="42" y="184" width="36" height="74" rx="2" fill="none" stroke="#c9a227" stroke-width=".8"/>
+    <text x="60" y="200" text-anchor="middle" font-family="Lexend" font-size="4.6" font-weight="700" fill="#4338ca" letter-spacing=".5">SELCRU</text>
+    ${righe.map((r,i)=>`<text x="60" y="${214+i*7}" text-anchor="middle" font-family="Lexend" font-size="5" font-weight="600" fill="#1a1a1a">${esc(r.slice(0,22))}</text>`).join("")}
+    <text x="60" y="${214+righe.length*7+2}" text-anchor="middle" font-family="Jost" font-size="4.2" fill="#6b6560">${esc((words[1]||"").trim())}</text>
+    <text x="60" y="250" text-anchor="middle" font-family="Jost" font-size="5.5" font-weight="600" fill="#7a1730">${esc(v.a && v.a!=="NV" ? v.a : (v.a||""))}</text>`;
+  const riflesso = `<path d="M44,${k==="spumante"?160:150} L44,290" stroke="#ffffff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 120 ${H}" class="${big ? "h-[420px]" : "h-full max-h-[200px]"} w-auto drop-shadow-md" role="img" aria-label="${esc(TIPO[k])} wine bottle, ${esc(v.t)}">
+    <path d="${corpo}" fill="${vetro}"/>${riflesso}${cap}${etichetta}</svg>`;
+}
+
+function card(v){
+  return `<article class="group relative flex min-h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] sm:rounded-2xl" data-vai="#/wine/${v.id}">
+    <div class="relative shrink-0 overflow-hidden border-b border-slate-200 bg-slate-50">
+      <div class="flex aspect-[4/3] items-center justify-center px-4 py-6 sm:px-6 sm:py-8"><div class="flex h-full max-h-[230px] items-center transition-transform duration-300 group-hover:scale-105">${bottiglia(v)}</div></div>
+      <span class="absolute left-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></span>
+      <span class="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+      <div class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/85 px-2 py-1 shadow-sm backdrop-blur-sm" aria-hidden="true"><i class="h-1.5 w-4 rounded-full bg-[#4338ca]"></i><i class="h-1.5 w-1.5 rounded-full bg-slate-300"></i></div>
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col px-4 py-4 sm:px-5">
+      <div class="mb-2 flex min-h-5 min-w-0 items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#4338ca] sm:text-[11px]"><span class="max-w-[45%] shrink-0 truncate">${TIPO[v.c]}</span><span class="h-1 w-1 shrink-0 rounded-full bg-slate-300"></span><span class="min-w-0 truncate text-xs font-medium normal-case tracking-normal text-slate-500">${esc(v.gr || regEn(v.r))}</span></div>
+      <h3 class="clamp2 min-h-[3rem] font-lexend text-base font-semibold leading-snug text-[#0f172a] sm:text-lg">${esc(v.t)}</h3>
+      <div class="mt-auto flex flex-col gap-3 pt-4 min-[420px]:flex-row min-[420px]:items-end min-[420px]:justify-between">
+        <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-1.5">${[regEn(v.r), v.a].filter(Boolean).map(x => `<span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">${esc(x)}</span>`).join("")}</div>
+        <div class="min-w-0 break-words text-left font-lexend text-lg font-bold leading-tight text-[#4338ca] min-[420px]:text-right sm:text-xl">${v.b ? esc(v.b) : "On request"}</div></div>
+      <a href="#/wine/${v.id}" class="mt-3 inline-flex h-10 w-full shrink-0 items-center justify-center rounded-xl border border-[#4338ca] bg-white px-4 text-sm font-semibold text-[#4338ca] transition-colors hover:bg-[#4338ca] hover:text-white">View Details</a>
+    </div></article>`;
+}
+const griglia = list => `<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6">${list.map(card).join("")}</div>`;
+const regioni = () => [...new Set(D.map(v => v.r).filter(Boolean))].map(r => ({ r, n:D.filter(v=>v.r===r).length, p:new Set(D.filter(v=>v.r===r).map(v=>v.p)).size })).sort((a,b)=>b.n-a.n);
+
+const titolo = (t, sopra, sotto) => `<div class="mb-8 text-center md:mb-12">${sopra ? `<p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#4338ca]">${sopra}</p>` : ""}<h2 class="font-lexend text-2xl font-bold text-[#0f172a] sm:text-3xl md:text-4xl">${t}</h2>${sotto ? `<p class="mx-auto mt-3 max-w-xl text-sm text-slate-600 md:text-base">${sotto}</p>` : ""}</div>`;
+function home(){
+  const regs = regioni(), nP = new Set(D.map(v=>v.p)).size;
+  const featured = ["W016","W012","W002","W062","W044","W059","W079","W050"].map(id=>D.find(v=>v.id===id));
+  const reds = ["W013","W052","W063","W029"].map(id=>D.find(v=>v.id===id));
+  const fascia = regs.map(x => `<span class="px-6 text-[0.68rem] uppercase tracking-[0.18em] text-[#4338ca] sm:px-12 sm:text-[0.72rem]">${esc(regEn(x.r))} <span class="text-[#4338ca]">+</span></span>`).join("");
+  return `<section class="grid min-h-[100svh] grid-cols-1 overflow-hidden md:min-h-screen md:grid-cols-2">
+    <div class="z-10 flex flex-col justify-center px-5 pb-10 pt-28 font-lexend sm:px-8 sm:pt-32 md:px-14 md:pb-16 md:pt-36 lg:pl-36 lg:pr-14">
+      <h1 class="mb-5 text-[2.45rem] font-bold leading-[1.08] text-[#0f172a] min-[390px]:text-5xl md:text-6xl lg:text-7xl">World's Leading<br>B2B Wine<br>Marketplace</h1>
+      <p class="mb-8 max-w-xl text-sm font-normal leading-7 text-[#6b6560] sm:text-base sm:leading-8 md:mb-10">Handpicked from the world's most celebrated estates. Every bottle in our collection tells a story of terroir, tradition, and craft.</p>
+      <div class="flex flex-col gap-3 min-[390px]:flex-row min-[390px]:flex-wrap min-[390px]:items-center">
+        <a href="#/collection" class="inline-flex h-10 items-center justify-center rounded-xl border border-[#4338ca] bg-[#4338ca] px-4 text-sm font-semibold text-white transition-colors hover:border-[#312e81] hover:bg-[#312e81]">Explore Products</a>
+        <a href="#/regions" class="inline-flex h-10 items-center justify-center rounded-xl border border-[#c7d2fe] bg-white px-4 text-sm font-semibold text-[#4338ca] transition-colors hover:border-[#4338ca] hover:text-[#312e81]">Browse Regions</a></div>
+      <div class="mt-8 grid grid-cols-3 gap-3 border-t border-[#ddd5c8] pt-6 sm:gap-4 md:mt-10 md:max-w-2xl md:pt-8">
+        <div class="min-w-0"><span class="block truncate text-2xl font-bold text-[#0f172a] sm:text-3xl">${D.length}</span><span class="text-[10px] font-semibold uppercase tracking-wide text-[#6b6560] sm:text-xs">Products</span></div>
+        <div class="min-w-0"><span class="block truncate text-2xl font-bold text-[#0f172a] sm:text-3xl">${regs.length}</span><span class="text-[10px] font-semibold uppercase tracking-wide text-[#6b6560] sm:text-xs">Regions</span></div>
+        <div class="min-w-0"><span class="block truncate text-2xl font-bold text-[#0f172a] sm:text-3xl">${nP}</span><span class="text-[10px] font-semibold uppercase tracking-wide text-[#6b6560] sm:text-xs">Producers</span></div></div>
+    </div>
+    <div class="relative h-[58vw] min-h-[220px] max-h-[360px] md:h-auto md:max-h-none"><img class="block h-full w-full object-cover" src="https://selcru.com/home/crystal-blue-wine.jpg" alt="Crystal blue wine glass"><div class="absolute inset-0 bg-gradient-to-b from-[#faf6f0] via-transparent to-transparent md:bg-gradient-to-r md:from-[#faf6f0]"></div></div>
+  </section>
+  <div class="overflow-hidden whitespace-nowrap bg-[#fcfcfc] py-3" aria-label="Regions"><div class="marquee">${fascia}${fascia}</div></div>
+  <section class="bg-white px-4 py-12 sm:px-6 md:px-16 md:py-24"><div class="mx-auto max-w-7xl">${titolo("Featured Wines")}${griglia(featured)}</div></section>
+  <section class="bg-[#faf6f0] px-4 py-12 sm:px-6 md:px-16 md:py-24"><div class="mx-auto max-w-7xl">${titolo("Popular Reds")}${griglia(reds)}</div></section>
+  <section class="bg-white px-4 py-12 sm:px-6 md:px-16 md:py-24"><div class="mx-auto max-w-7xl">${titolo("Explore by Region", "Discover", regs.length + " regions in our live catalogue")}
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-5 lg:grid-cols-6">${regs.map(x => `<a href="#/collection?r=${encodeURIComponent(x.r)}" class="group min-w-0 cursor-pointer rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-6 text-center shadow-sm transition-all hover:border-[#4338ca] hover:bg-white hover:shadow-[0_20px_50px_rgba(15,23,42,0.08)] sm:rounded-2xl sm:px-5 sm:py-8">
+      <div class="mb-3 text-3xl leading-none transition-transform duration-300 group-hover:scale-105 sm:text-4xl" aria-hidden="true">🍇</div><div class="truncate font-lexend text-sm font-semibold text-[#0f172a] sm:text-base md:text-lg">${esc(regEn(x.r))}</div><div class="mt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">${x.n} wines</div></a>`).join("")}</div></div></section>`;
+}
+
+function collection(params){
+  const r = params.get("r") || "", c = params.get("c") || "", q = (params.get("q") || "").toLowerCase();
+  const list = D.filter(v => (!r || v.r===r) && (!c || v.c===c) && (!q || (v.t+" "+v.gr+" "+regEn(v.r)).toLowerCase().includes(q)));
+  const link = (k, val) => { const p = new URLSearchParams(params); if(val) p.set(k, val); else p.delete(k); const s = p.toString(); return "#/collection" + (s ? "?" + s : ""); };
+  const chip = (lab, k, val, on) => `<a href="${link(k,val)}" class="rounded-full border px-4 py-1.5 text-sm font-semibold ${on ? "border-indigo-700 bg-indigo-700 text-white" : "border-slate-200 bg-white text-slate-700 hover:border-indigo-300"}">${lab}</a>`;
+  return `<section class="px-4 pb-12 pt-28 sm:px-6 md:px-16 md:pt-32"><div class="mx-auto max-w-7xl">
+    <p class="text-[12px] font-semibold uppercase tracking-[0.2em] text-indigo-700">Collection</p>
+    <h1 class="mt-2 font-lexend text-4xl font-bold text-slate-900">${r ? esc(regEn(r)) : "All wines"}</h1>
+    <p class="mt-2 text-taupe">${list.length} wines · ex cellar price bands · partner prices after login</p>
+    <div class="mt-8 flex flex-wrap items-center gap-2">${chip("All", "c", "", !c)}${Object.entries(TIPO).map(([k,l]) => chip(l, "c", k, c===k)).join("")}
+      <select id="freg" class="ml-auto rounded-full border border-slate-200 bg-white px-4 py-2 text-sm" aria-label="Region"><option value="">All regions</option>${regioni().map(x=>`<option value="${esc(x.r)}" ${x.r===r?"selected":""}>${esc(regEn(x.r))}</option>`).join("")}</select>
+      <input id="fq" type="search" value="${esc(params.get("q")||"")}" placeholder="Search appellation or grape" class="w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-sm sm:w-64" aria-label="Search"></div>
+    <div class="mt-8">${list.length ? griglia(list) : `<p class="rounded-2xl bg-white p-10 text-center text-taupe">No wines match these filters.</p>`}</div></div></section>`;
+}
+
+function scheda(id){
+  const v = D.find(x => x.id===id); if(!v) return `<section class="p-16 text-center">Wine not found. <a class="text-indigo-700 underline" href="#/collection">Back to the collection</a></section>`;
+  const fatti = [["Vintage", v.a], ["Alcohol", v.g ? String(v.g).replace(".", ",") + "%" : ""], ["Format", "0,75 L · 12 bottles per case"], ["Grapes", v.gr], ["Vineyard", v.vy], ["Ageing", v.ag], ["Pairings", v.pa]].filter(x => x[1]);
+  const altri = D.filter(x => x.p===v.p && x.id!==v.id).slice(0, 4);
+  return `<section class="px-4 pb-12 pt-28 sm:px-6 md:px-16 md:pt-32"><div class="mx-auto max-w-7xl">
+    <a href="#/collection" class="text-sm font-semibold text-indigo-700">← Back to the collection</a>
+    <div class="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2">
+      <div class="flex items-center justify-center rounded-3xl border border-slate-100 bg-slate-50 py-10">${bottiglia(v, true)}</div>
+      <div class="flex flex-col">
+        <p class="text-[12px] font-bold uppercase tracking-wider text-indigo-700">${TIPO[v.c]}<span class="mx-2 text-slate-300">•</span><span class="font-medium normal-case tracking-normal text-slate-500">${esc(regEn(v.r))}</span></p>
+        <h1 class="mt-3 font-lexend text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">${esc(v.t)}</h1>
+        <p class="mt-2 text-taupe">Family estate in ${esc(regEn(v.r))} · producer ${esc(v.p)}</p>
+        ${v.ts ? `<p class="mt-6 border-l-4 border-indigo-200 pl-4 font-lexend text-base leading-7 text-slate-700">${esc(v.ts)}</p>` : ""}
+        <dl class="mt-8 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">${fatti.map(([k,val]) => `<div><dt class="text-[11px] font-semibold uppercase tracking-[0.16em] text-taupe">${k}</dt><dd class="mt-1 text-slate-900">${esc(val)}</dd></div>`).join("")}</dl>
+        <div class="mt-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+          <div class="flex items-baseline justify-between"><span class="text-sm text-taupe">Ex cellar price band</span><span class="font-lexend text-2xl font-bold text-indigo-700">${v.b ? esc(v.b) : "On request"}</span></div>
+          <p class="mt-2 text-sm text-taupe">Partners see their own price list, the producer and the full story, and order by the case on one purchase order.</p>
+          <a href="#/login" class="mt-4 block rounded-xl bg-indigo-700 py-3 text-center text-sm font-bold text-white hover:bg-indigo-800">Login to order</a>
+        </div>
+      </div>
+    </div>
+    ${altri.length ? `<h2 class="mb-6 mt-16 font-lexend text-2xl font-bold text-slate-900">More from this producer</h2>${griglia(altri)}` : ""}
+  </div></section>`;
+}
+
+function pagRegioni(){
+  return `<section class="px-4 pb-12 pt-28 sm:px-6 md:px-16 md:pt-32 md:pb-20"><div class="mx-auto max-w-7xl">
+    <p class="text-[12px] font-semibold uppercase tracking-[0.2em] text-indigo-700">Regions</p>
+    <h1 class="mt-2 font-lexend text-4xl font-bold text-slate-900">Italy, region by region</h1>
+    <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">${regioni().map(x => `<a href="#/collection?r=${encodeURIComponent(x.r)}" class="flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:border-indigo-200">
+      <div><p class="font-lexend text-xl font-semibold text-slate-900">${esc(regEn(x.r))}</p><p class="mt-1 text-sm text-taupe">${x.n} wines · ${x.p} ${x.p===1?"producer":"producers"}</p></div><span class="text-2xl text-indigo-700" aria-hidden="true">→</span></a>`).join("")}</div></div></section>`;
+}
+
+function piano(){
+  const passi = [["Pick from the portfolio","Partners see their own price list and compose a mixed order across producers, by the case."],
+    ["One purchase order","Vintages, alcohol and prices are confirmed with each producer; you approve a single order."],
+    ["Labels and documents","Label data for registration (TTB/COLA in the USA, back labels in Asia), packing lists and export documents."],
+    ["Pick-up and shipping","Goods ready about three weeks after confirmation, collected ex cellar and consolidated at Livorno."]];
+  return `<section class="px-4 pb-12 pt-28 sm:px-6 md:px-16 md:pt-32 md:pb-20"><div class="mx-auto max-w-7xl">
+    <p class="text-[12px] font-semibold uppercase tracking-[0.2em] text-indigo-700">Plan</p>
+    <h1 class="mt-2 max-w-3xl font-lexend text-4xl font-bold leading-tight text-slate-900">One order, many producers. We handle the rest.</h1>
+    <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">${passi.map(([t,d],i) => `<div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <span class="grid h-10 w-10 place-items-center rounded-xl bg-indigo-50 font-lexend font-bold text-indigo-700">${i+1}</span>
+      <h2 class="mt-4 font-lexend text-lg font-semibold text-slate-900">${t}</h2><p class="mt-2 text-sm leading-6 text-taupe">${d}</p></div>`).join("")}</div>
+    <div class="mt-12 flex flex-col items-start gap-4 rounded-3xl bg-[#0f172a] p-8 text-white md:flex-row md:items-center md:justify-between">
+      <div><h2 class="font-lexend text-2xl font-bold">Become a partner</h2><p class="mt-2 text-slate-300">Importers, distributors and sales representatives: request access to prices and ordering.</p></div>
+      <a href="#/login" class="rounded-xl bg-white px-5 py-3 text-sm font-bold text-indigo-700">Login</a></div></div></section>`;
+}
+
+/* Accesso: area.html con password, nessun elenco di utenti nel sito pubblico. */
+function login(){
+  const box = (t, d, sel, opts, btn) => `<div class="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+    <h2 class="font-lexend text-xl font-semibold text-slate-900">${t}</h2><p class="text-sm leading-6 text-taupe">${d}</p>
+    ${opts ? `<select id="${sel}" class="rounded-xl border border-slate-200 bg-cream/50 px-3 py-2.5 text-sm" aria-label="${t}">${opts.map(([v,l])=>`<option value="${v}">${esc(l)}</option>`).join("")}</select>` : ""}
+    <a href="area.html" class="mt-auto rounded-xl bg-indigo-700 py-3 text-center text-sm font-bold text-white hover:bg-indigo-800">Sign in</a>
+    ${btn ? `<button type="button" data-entra="${sel}" class="text-sm font-semibold text-indigo-700 hover:underline">${btn}</button>` : ""}</div>`;
+  return `<section class="px-4 pb-12 pt-28 sm:px-6 md:px-16 md:pt-32 md:pb-20"><div class="mx-auto max-w-5xl">
+    <h1 class="text-center font-lexend text-4xl font-bold text-slate-900">Login</h1>
+    <p class="mx-auto mt-3 max-w-xl text-center text-taupe">One entrance for everyone: sign in with the password you received. No password yet? Request access and we will send it to you.</p>
+    <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+      ${box("Sales partners", "Your price list, the full catalogue with producers, a cart and your orders.", "ag", null, "Request access")}
+      ${box("Producers", "Your orders, the documents still to send and the shipping instructions.", "ca", null, "Request access")}
+      ${box("Selcru team", "Orders, documents and price lists.", "bo", null, "")}
+    </div></div></section>`;
+}
+document.addEventListener("click", e => {
+  const card = e.target.closest("[data-vai]"); if(card && !e.target.closest("a")){ location.hash = card.dataset.vai; return; }
+  const b = e.target.closest("[data-entra]"); if(!b) return;
+  window.open("https://www.selcru.com/contact/", "_blank", "noopener");
+});
+
+function route(){
+  const h = location.hash.replace(/^#/, "") || "/", [path, qs] = h.split("?"), params = new URLSearchParams(qs || "");
+  const app = document.getElementById("app");
+  app.innerHTML = path === "/" ? home() : path === "/collection" ? collection(params) : path.startsWith("/wine/") ? scheda(path.slice(6))
+    : path === "/regions" ? pagRegioni() : path === "/plan" ? piano() : path === "/login" ? login() : home();
+  if(path !== "/" || !qs) window.scrollTo(0, 0);
+  const freg = document.getElementById("freg"), fq = document.getElementById("fq");
+  if(freg) freg.addEventListener("change", () => { const p = new URLSearchParams(params); freg.value ? p.set("r", freg.value) : p.delete("r"); location.hash = "#/collection" + (p.toString() ? "?" + p : ""); });
+  if(fq) fq.addEventListener("change", () => { const p = new URLSearchParams(params); fq.value ? p.set("q", fq.value) : p.delete("q"); location.hash = "#/collection" + (p.toString() ? "?" + p : ""); });
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
